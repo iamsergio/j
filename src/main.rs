@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-use std::io::Write;
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
 
 use chrono::Datelike;
 
@@ -28,12 +31,18 @@ fn add_journal(text: String) {
     let mut file = std::fs::OpenOptions::new()
         .create(true)
         .append(true)
-        .open(filename)
+        .read(true)
+        .open(filename.clone())
         .unwrap();
 
     file.write_all("- ".as_bytes()).unwrap();
     file.write_all(text.as_bytes()).unwrap();
     file.write_all(b"\n").unwrap();
+
+    let mut file = File::open(&filename).unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    println!("{}:\n{}", filename, contents);
 }
 
 fn main() {
