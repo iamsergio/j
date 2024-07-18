@@ -3,6 +3,7 @@
 use std::{
     fs::File,
     io::{Read, Write},
+    path::PathBuf,
 };
 
 use chrono::Datelike;
@@ -17,16 +18,14 @@ fn filename_for_week(folder: std::path::PathBuf, week: u32) -> String {
 }
 
 fn add_journal(text: String) {
-    let j_path = std::env::var("J_PATH").expect("J_PATH env var not set");
-    let path = std::path::Path::new(&j_path);
-    let year = chrono::Utc::now().year().to_string();
-    let path_with_year = path.join(year);
+    let path_with_year = path_with_year();
 
     if !path_with_year.exists() {
         std::fs::create_dir(&path_with_year).unwrap();
     }
 
-    let filename = filename_for_week(path_with_year, current_week_number());
+    let week = current_week_number();
+    let filename = filename_for_week(path_with_year, week);
 
     let mut file = std::fs::OpenOptions::new()
         .create(true)
@@ -38,6 +37,26 @@ fn add_journal(text: String) {
     file.write_all("- ".as_bytes()).unwrap();
     file.write_all(text.as_bytes()).unwrap();
     file.write_all(b"\n").unwrap();
+
+    show_journal(week);
+}
+
+fn path_with_year() -> PathBuf {
+    let j_path = std::env::var("J_PATH").expect("J_PATH env var not set");
+    let path = std::path::Path::new(&j_path);
+    let year = chrono::Utc::now().year().to_string();
+    let path_with_year = path.join(year);
+    path_with_year
+}
+
+fn show_journal(week: u32) {
+    let path_with_year = path_with_year();
+
+    if !path_with_year.exists() {
+        std::fs::create_dir(&path_with_year).unwrap();
+    }
+
+    let filename = filename_for_week(path_with_year, week);
 
     let mut file = File::open(&filename).unwrap();
     let mut contents = String::new();
@@ -59,10 +78,10 @@ fn main() {
         std::process::exit(1);
     }
 
-    // bail out if argument wasn't provided:
+    // show current journal if no argument provided
     if std::env::args().len() < 2 {
-        eprintln!("No text provided");
-        std::process::exit(1);
+        show_journal(current_week_number());
+        std::process::exit(0);
     }
 
     // join all arguments into a single string:
