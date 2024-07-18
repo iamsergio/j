@@ -5,18 +5,15 @@ name = "weekly_journals"
 version = "0.2.0"
 edition = "2021"
 exclude = [".github/*", "vscode*"]
-homepage = "https://github.com/iamsergio/vscode-workspace-gen"
-repository = "https://github.com/iamsergio/vscode-workspace-gen"
+homepage = "https://github.com/iamsergio/j"
+repository = "https://github.com/iamsergio/j"
 license = "MIT"
-description = "Generates vscode workspace files from a template"
+description = "Writes a journal entry to a text file corresponding to the current week number."
 keywords = ["cli", "journal"]
 categories = ["command-line-utilities"]
 
 [dependencies]
 chrono = "0.4.38"
-clap = { version = "4.5.0", features = ["derive"] }
-serde = { version = "1.0.197", features = ["derive"] }
-serde_json = { version = "1.0.115", features = ["preserve_order", "indexmap"] }
 
 [[bin]]
 name = "j"
