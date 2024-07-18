@@ -65,7 +65,8 @@ fn main() {
         std::process::exit(1);
     }
 
-    let text = std::env::args().nth(1).unwrap();
+    // join all arguments into a single string:
+    let text = std::env::args().skip(1).collect::<Vec<String>>().join(" ");
 
     add_journal(text);
 }
