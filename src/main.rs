@@ -6,8 +6,7 @@ use chrono::Datelike;
 
 fn current_week_number() -> u32 {
     let now = chrono::Utc::now();
-    let week = now.iso_week().week();
-    week
+    now.iso_week().week()
 }
 
 fn filename_for_week(folder: std::path::PathBuf, week: u32) -> String {
