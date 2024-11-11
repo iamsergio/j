@@ -45,8 +45,7 @@ fn path_with_year() -> PathBuf {
     let j_path = std::env::var("J_PATH").expect("J_PATH env var not set");
     let path = std::path::Path::new(&j_path);
     let year = chrono::Utc::now().year().to_string();
-    let path_with_year = path.join(year);
-    path_with_year
+    path.join(year)
 }
 
 fn show_journal(week: u32) {
