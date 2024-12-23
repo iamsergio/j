@@ -31,6 +31,7 @@ fn add_journal(text: String) {
         .create(true)
         .append(true)
         .read(true)
+        .truncate(false)
         .open(filename.clone())
         .unwrap();
 
