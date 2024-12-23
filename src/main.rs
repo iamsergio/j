@@ -62,6 +62,7 @@ fn show_journal(week: u32) {
         .read(true)
         .write(true)
         .create(true)
+        .truncate(false)
         .open(&filename)
         .expect("Failed to open or create file");
 
