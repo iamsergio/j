@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 use std::{
-    fs::File,
+    fs::OpenOptions,
     io::{Read, Write},
     path::PathBuf,
 };
@@ -57,7 +57,13 @@ fn show_journal(week: u32) {
 
     let filename = filename_for_week(path_with_year, week);
 
-    let mut file = File::open(&filename).unwrap();
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(&filename)
+        .expect("Failed to open or create file");
+
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
     println!("{}:\n{}", filename, contents);
